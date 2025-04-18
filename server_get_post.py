@@ -2,7 +2,8 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from datetime import datetime
 
-HOST = 'localhost'
+HOST = '0.0.0.0'
+
 PORT = 8000
 
 # In-memory storage
@@ -29,11 +30,19 @@ class SimpleHandler(BaseHTTPRequestHandler):
             if message:
                 timestamp = datetime.now().isoformat()
                 messages[timestamp] = message
-                self._send_json_response({"status": "ok"})
+                self._set_headers(200)
+                response = json.dumps({"status": "ok"})
             else:
-                self._send_json_response({"error": "Missing 'message' field"}, status=400)
+                self._set_headers(400)
+                response = json.dumps({"error": "Missing 'message' field"})
         except json.JSONDecodeError:
-            self._send_json_response({"error": "Invalid JSON"}, status=400)
+            self._set_headers(400)
+            response = json.dumps({"error": "Invalid JSON"})
+
+        try:
+            self.wfile.write(response.encode('utf-8'))
+        except BrokenPipeError:
+            print("Client disconnected before response could be sent.")
 
     def _send_json_response(self, payload, status=200):
         response_bytes = json.dumps(payload).encode('utf-8')

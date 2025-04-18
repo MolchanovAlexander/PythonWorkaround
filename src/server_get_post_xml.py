@@ -24,7 +24,7 @@ class SimpleXMLHandler(BaseHTTPRequestHandler):
             message = xml_data.findtext('message')
 
             if message:
-                timestamp = datetime.utcnow().isoformat()
+                timestamp = datetime.now().isoformat()
                 messages[timestamp] = message
                 response = ET.Element('response')
                 response.text = 'ok'
