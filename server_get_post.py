@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from datetime import datetime
-
+import os
 HOST = '0.0.0.0'
 
 PORT = 8000
@@ -16,9 +16,49 @@ class SimpleHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        self._set_headers()
-        response = json.dumps(messages)
-        self.wfile.write(response.encode('utf-8'))
+        if self.path == '/html-string':
+            self._set_headers(content_type='text/html')
+            html_content = """
+            <html>
+            <head><title>HTML with Divs and CSS</title><link rel="stylesheet" type="text/css" href="/static/styles.css"></head>
+            <body>
+                <div class="div1">This from string </div>
+                <div class="div2">This from string</div>
+                <div class="div3">This from string</div>
+                <div class="div4">This from string  </div>
+            </body>
+            </html>
+            """
+            self.wfile.write(html_content.encode('utf-8'))
+
+        elif self.path == '/html-file':
+            try:
+                with open('index.html', 'r') as file:
+                    html_content = file.read()
+                    self._set_headers(content_type='text/html')
+                    self.wfile.write(html_content.encode('utf-8'))
+            except FileNotFoundError:
+                self._set_headers(404, content_type='application/json')
+                self.wfile.write(json.dumps({"error": "File not found"}).encode('utf-8'))
+
+        elif self.path == '/static/styles.css':
+            try:
+                with open('styles.css', 'r') as file:
+                    css_content = file.read()
+                    self._set_headers(content_type='text/css')
+                    self.wfile.write(css_content.encode('utf-8'))
+            except FileNotFoundError:
+                self._set_headers(404, content_type='application/json')
+                self.wfile.write(json.dumps({"error": "CSS file not found"}).encode('utf-8'))
+
+        elif self.path == '/messages':
+            self._set_headers()
+            response = json.dumps(messages)
+            self.wfile.write(response.encode('utf-8'))
+
+        else:
+            self._set_headers(404)
+            self.wfile.write(json.dumps({"error": "Not found"}).encode('utf-8'))
 
     def do_POST(self):
         content_length = int(self.headers.get('Content-Length', 0))
