@@ -1,0 +1,57 @@
+/* styles.css */
+
+/* Ensure the body takes the full height of the viewport */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+/* Container for divs */
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Allows the items to wrap to the next line */
+    gap: 10px; /* Space between divs */
+    justify-content: center; /* Center the items horizontally */
+    align-items: stretch; /* Stretch divs to fill the container's height */
+    height: 100vh; /* Full height of the viewport */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Styling for each div */
+.div1, .div2, .div3, .div4 {
+    width: calc(50% - 10px); /* Each div takes up half the width, minus the gap */
+    padding: 20px;
+    color: black;
+    box-sizing: border-box; /* To include padding and margin in the width calculation */
+    text-align: center;
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Lighter color settings for the main divs */
+.div1 {
+    background-color: #FFB3B3; /* Light Red */
+}
+
+.div2 {
+    background-color: #B3FFB3; /* Light Green */
+}
+
+.div3 {
+    background-color: #B3B3FF; /* Light Blue */
+}
+
+.div4 {
+    background-color: #FFF2B3; /* Light Yellow */
+}
+
+
+/* Make the divs stack in one column on smaller screens */
+@media (max-width: 768px) {
+    .div1, .div2, .div3, .div4 {
+        width: calc(100% - 10px); /* Full width for each div on smaller screens */
+    }
+}

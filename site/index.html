@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTML with Divs and CSS</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="div1">
+            <div>
+                <h1>This is div 1</h1>
+            </div>
+            <div>
+                <select name="guf">
+                <option>I am noob </option>
+                <option>You too</option>
+            </select>
+            </div>
+        </div>
+        <div class="div2">
+            <div>
+                <h1>This is div 2</h1>
+            </div>
+            <div>
+                <select name="guf">
+                <option>I am noob </option>
+                <option>And You too</option>
+            </select>
+            </div></div>
+        <div class="div3">This is div 3</div>
+        <div class="div4">
+            This is div 4
+            <h3>Send a Message</h3>
+                <input type="text" id="messageInput" placeholder="Enter your message" />
+                <button id="sendMessageButton">Send Message</button>
+        </div>
+    </div>
+ <script>
+        document.getElementById('sendMessageButton').addEventListener('click', function() {
+            const message = document.getElementById('messageInput').value;
+
+            // Check if the input is not empty
+            if (message.trim() !== "") {
+                // Prepare the data to be sent
+                const data = { message: message };
+
+                // Send POST request
+                fetch('http://localhost:8000', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    alert("Message sent successfully!");
+                    document.getElementById('messageInput').value = ''; // Clear the input field
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert("Failed to send message!");
+                });
+            } else {
+                alert("Please enter a message.");
+            }
+        });
+    </script>
+</body>
+</html>

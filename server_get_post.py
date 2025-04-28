@@ -13,7 +13,14 @@ class SimpleHandler(BaseHTTPRequestHandler):
     def _set_headers(self, status=200, content_type='application/json'):
         self.send_response(status)
         self.send_header('Content-type', content_type)
+        # comment for cors
+        self.send_header('Access-Control-Allow-Origin', '*')  # <-- Allow CORS from anywhere
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS') # <-- Allow CORS from anywhere
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type') # <-- Allow CORS from anywhere
         self.end_headers()
+
+    def do_OPTIONS(self): # <-- Allow CORS from anywhere
+        self._set_headers() # <-- Allow CORS from anywhere
 
     def do_GET(self):
         if self.path == '/html-string':
