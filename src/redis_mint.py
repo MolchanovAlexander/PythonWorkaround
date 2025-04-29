@@ -1,12 +1,17 @@
+import os
+
 import redis
 
-# Replace with PC A's IP address
-redis_host = '192.168.1.110'  # IP of PC A
+#redis_host = '192.168.1.110'  # IP of PC A
 
+redis_host = os.getenv("PUBLIC_IP")
 redis_port = 6379
-
+print(redis_host)
 try:
-    r = redis.Redis(host=redis_host, port=redis_port, decode_responses=True)
+    r = redis.Redis(host=redis_host, port=redis_port, decode_responses=True,
+                    socket_connect_timeout=5,  # seconds to wait when connecting
+                    socket_timeout=5,  # seconds to wait for read/write
+                    )
 
     # Set a key
     r.set('greeting', 'Hello from PC B!')
